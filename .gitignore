@@ -1,0 +1,10 @@
+# Dependencies
+/backend/node_modules
+/vendor-panel/node_modules
+
+# Build
+/vendor-panel/dist
+/backend/dist
+
+# OS
+.DS_Store
