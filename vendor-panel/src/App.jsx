@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import PropertyList from './pages/PropertyList';
 import PropertyForm from './pages/PropertyForm';
 import Profile from './pages/Profile';
+import Leads from './pages/Leads';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="properties" element={<PropertyList />} />
           <Route path="properties/new" element={<PropertyForm />} />
           <Route path="properties/:id/edit" element={<PropertyForm />} />
+          <Route path="leads" element={<Leads />} />
           <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

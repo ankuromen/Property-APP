@@ -1,9 +1,10 @@
 const express = require('express');
+const propertyRoutes = require('./properties');
+const leadRoutes = require('./leads');
 
 const router = express.Router();
 
-// Public website routes (no auth): list properties, get property, create lead (contact vendor)
-// router.use('/properties', websitePropertyRoutes);
-// router.use('/leads', websiteLeadRoutes);
+router.use('/properties', propertyRoutes);
+router.use('/leads', leadRoutes);
 
 module.exports = router;

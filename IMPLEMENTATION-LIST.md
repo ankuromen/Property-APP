@@ -2,7 +2,7 @@
 
 **Goal:** Complete the platform as per [idea.txt](idea.txt). Work through the list in order; mark items `[x]` when done.
 
-**Status:** Sections 1–2 complete. Next: **3.1** (Lead model).
+**Status:** Sections 1–3 complete. Next: **4.1** (Subscription/plan model).
 
 ---
 
@@ -31,13 +31,13 @@
 
 ## 3. Leads + public property + user website
 
-- [ ] **3.1** Backend: Lead model (`customerName`, `customerPhone`, `propertyId`, `vendorId`, `createdAt`).
+- [x] ✓ **3.1** Backend: Lead model (`customerName`, `customerPhone`, `propertyId`, `vendorId`, `createdAt`).
 - [ ] **3.2** Backend: POST endpoint to create lead (no auth; from user website). Validate property exists and is active.
-- [ ] **3.3** Backend: Public property APIs — list (filters, sort, pagination), get by ID (for detail page). No auth.
-- [ ] **3.4** Backend: GET leads for logged-in vendor under `/api/vendor/leads` (all leads; daily limit not applied yet).
-- [ ] **3.5** User website: Project setup (e.g. Vite + React), home/landing, browse page (call list API), property detail page.
-- [ ] **3.6** User website: “Contact Vendor” form (name, phone) on property detail; submit creates lead and shows thank-you message.
-- [ ] **3.7** Vendor panel: Leads page — list leads with property reference, customer name, phone (full access for now).
+- [x] ✓ **3.3** Backend: Public property APIs — list (filters, sort, pagination), get by ID (for detail page). No auth.
+- [x] ✓ **3.4** Backend: GET leads for logged-in vendor under `/api/vendor/leads` (all leads; daily limit not applied yet).
+- [x] ✓ **3.5** User website: Project setup (e.g. Vite + React), home/landing, browse page (call list API), property detail page.
+- [x] ✓ **3.6** User website: “Contact Vendor” form (name, phone) on property detail; submit creates lead and shows thank-you message.
+- [x] ✓ **3.7** Vendor panel: Leads page — list leads with property reference, customer name, phone (full access for now).
 
 **Checkpoint:** Customer can browse properties, submit Contact Vendor; vendor sees lead. No daily limit or payment yet.
 

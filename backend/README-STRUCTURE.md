@@ -73,9 +73,13 @@ URLs never overlap, so there is no conflict between modules.
 - `GET /api/vendor/profile` — auth required, returns current vendor (no password)
 - `PUT /api/vendor/profile` — auth required, body: name, email, phone
 - `PUT /api/vendor/profile/password` — auth required, body: currentPassword, newPassword
+- `GET /api/vendor/leads` — auth required, list leads for current vendor (with property ref)
 
 **Admin** — (none yet)
 
-**Website** — (none yet)
+**Website** (no auth)
+- `GET /api/website/properties` — list public properties (query: page, limit, sort, order, city, propertyType, minPrice, maxPrice, bhk, etc.)
+- `GET /api/website/properties/:id` — get single public property
+- `POST /api/website/leads` — create lead; body: customerName, customerPhone, propertyId
 
 When adding a new feature, add it to the correct module’s controller + route and mount under that module’s base path only.
