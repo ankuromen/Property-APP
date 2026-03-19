@@ -1,0 +1,3 @@
+mongodb+srv://ankur:<db_password>@cluster0.zouhqzt.mongodb.net/?appName=Cluster0
+Password: hnClN1qRnLhiKj4J
+username: ankur
