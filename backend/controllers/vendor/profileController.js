@@ -3,7 +3,7 @@ const Vendor = require('../../models/Vendor');
 exports.getProfile = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.vendor._id).select('-password');
-    if (!vendor) return res.status(404).json({ message: 'Vendor not found' });
+    if (!vendor) return res.status(404).json({ message: 'Broker not found' });
     res.json(vendor);
   } catch (err) {
     res.status(500).json({ message: err.message || 'Failed to get profile' });
@@ -13,11 +13,16 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.vendor._id);
-    if (!vendor) return res.status(404).json({ message: 'Vendor not found' });
+    if (!vendor) return res.status(404).json({ message: 'Broker not found' });
 
-    const { name, email, phone } = req.body;
+    const { name, email, phone, consultationFee } = req.body;
     if (name !== undefined) vendor.name = name.trim();
     if (phone !== undefined) vendor.phone = phone.trim();
+    if (consultationFee !== undefined) {
+      const fee = Number(consultationFee);
+      if (Number.isNaN(fee) || fee < 0) return res.status(400).json({ message: 'consultationFee must be a non-negative number' });
+      vendor.consultationFee = fee;
+    }
     if (email !== undefined && email.trim() !== vendor.email) {
       const existing = await Vendor.findOne({ email: email.trim().toLowerCase() });
       if (existing) return res.status(400).json({ message: 'Email already in use' });
@@ -43,7 +48,7 @@ exports.updatePassword = async (req, res) => {
     }
 
     const vendor = await Vendor.findById(req.vendor._id).select('+password');
-    if (!vendor) return res.status(404).json({ message: 'Vendor not found' });
+    if (!vendor) return res.status(404).json({ message: 'Broker not found' });
 
     const match = await vendor.matchPassword(currentPassword);
     if (!match) return res.status(401).json({ message: 'Current password is incorrect' });
@@ -53,5 +58,30 @@ exports.updatePassword = async (req, res) => {
     res.json({ message: 'Password updated successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message || 'Failed to update password' });
+  }
+};
+
+exports.getSubscriptionStatus = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.vendor._id).select(
+      'subscriptionStatus subscriptionPlanId subscriptionStartAt subscriptionEndsAt'
+    );
+    if (!vendor) return res.status(404).json({ message: 'Broker not found' });
+
+    const now = new Date();
+    const isSubscriptionActive =
+      vendor.subscriptionStatus === 'active' &&
+      vendor.subscriptionEndsAt &&
+      new Date(vendor.subscriptionEndsAt).getTime() >= now.getTime();
+
+    res.json({
+      subscriptionStatus: vendor.subscriptionStatus || 'free',
+      subscriptionPlanId: vendor.subscriptionPlanId || null,
+      subscriptionStartAt: vendor.subscriptionStartAt || null,
+      subscriptionEndsAt: vendor.subscriptionEndsAt || null,
+      isSubscriptionActive,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message || 'Failed to get subscription status' });
   }
 };

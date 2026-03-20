@@ -6,6 +6,15 @@ const vendorSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     phone: { type: String, required: true, trim: true },
+    consultationFee: { type: Number, default: 100, min: 0 },
+    subscriptionStatus: {
+      type: String,
+      enum: ['free', 'active', 'expired', 'cancelled'],
+      default: 'free',
+    },
+    subscriptionPlanId: { type: String, trim: true },
+    subscriptionStartAt: { type: Date },
+    subscriptionEndsAt: { type: Date },
     password: { type: String, required: true, minlength: 6, select: false },
   },
   { timestamps: true }

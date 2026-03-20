@@ -8,7 +8,7 @@ const propertySchema = new mongoose.Schema(
     propertyType: { type: String, required: true, trim: true },
     propertySubType: { type: String, trim: true },
     transactionType: { type: String, trim: true }, // Sale, Rent, Lease, PG
-    status: { type: String, trim: true, default: 'Active' },
+    status: { type: String, trim: true, enum: ['Pending', 'Active', 'Rejected'], default: 'Active' },
     description: { type: String, trim: true, default: '' },
     reraId: { type: String, trim: true },
     reraStatus: { type: String, trim: true },
@@ -135,9 +135,21 @@ const propertySchema = new mongoose.Schema(
     floorPlanUrl: { type: String, trim: true },
     documentUrls: [{ type: String }],
 
-    // —— Vendor ——
-    vendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true },
+    // —— Listing source & ownership ——
+    vendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' }, // legacy owner pointer (required for broker-posted listings)
+    postedByType: { type: String, enum: ['broker', 'owner'], default: 'broker' },
+    postedById: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+    ownerContact: {
+      name: { type: String, trim: true },
+      phone: { type: String, trim: true },
+      email: { type: String, trim: true, lowercase: true },
+    },
     listedBy: { type: String, trim: true },
+
+    // —— Moderation ——
+    reviewNotes: { type: String, trim: true },
+    reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+    reviewedAt: { type: Date },
 
     // —— Discovery ——
     placesNearby: [{ type: mongoose.Schema.Types.Mixed }],

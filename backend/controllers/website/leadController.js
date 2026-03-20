@@ -7,7 +7,7 @@ const isValidId = (id) => mongoose.Types.ObjectId.isValid(id) && new mongoose.Ty
 /**
  * POST /api/website/leads — create lead (no auth).
  * Body: customerName, customerPhone, propertyId.
- * Validates property exists and is active (status === 'Active', visibility === 'Public').
+ * Validates property exists and is active/public.
  */
 exports.create = async (req, res) => {
   try {
@@ -33,16 +33,32 @@ exports.create = async (req, res) => {
       return res.status(404).json({ message: 'Property not found or not available for contact' });
     }
 
+    const destinationType = property.postedByType === 'owner' ? 'owner' : 'broker';
+    const destinationBrokerId = property.postedById || property.vendorId || null;
+
     const lead = await Lead.create({
       customerName: String(customerName).trim(),
       customerPhone: String(customerPhone).trim(),
       propertyId: property._id,
-      vendorId: property.vendorId,
+      destinationType,
+      status: 'new',
+      vendorId: destinationType === 'broker' ? destinationBrokerId : undefined,
+      brokerId: destinationType === 'broker' ? destinationBrokerId : undefined,
+      ownerContactSnapshot:
+        destinationType === 'owner'
+          ? {
+              name: property.ownerContact?.name,
+              phone: property.ownerContact?.phone,
+              email: property.ownerContact?.email,
+            }
+          : undefined,
     });
 
     res.status(201).json({
-      message: 'Thank you! The vendor will contact you soon.',
+      message: 'Thank you! The broker/owner will contact you soon.',
       leadId: lead._id,
+      destinationType: lead.destinationType,
+      status: lead.status,
     });
   } catch (err) {
     res.status(500).json({ message: err.message || 'Failed to submit contact request' });

@@ -1,8 +1,10 @@
 # Dependencies
 /backend/node_modules
 /vendor-panel/node_modules
+/website-nextjs/node_modules
+/broker-panel/node_modules
+/user-website/node_modules
 
-# Build
 /vendor-panel/dist
 /backend/dist
 
