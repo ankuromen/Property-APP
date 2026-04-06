@@ -8,7 +8,7 @@ const propertySchema = new mongoose.Schema(
     propertyType: { type: String, required: true, trim: true },
     propertySubType: { type: String, trim: true },
     transactionType: { type: String, trim: true }, // Sale, Rent, Lease, PG
-    status: { type: String, trim: true, enum: ['Pending', 'Active', 'Rejected'], default: 'Active' },
+    status: { type: String, trim: true, enum: ['Pending', 'Active', 'Rejected'], default: 'Pending' },
     description: { type: String, trim: true, default: '' },
     reraId: { type: String, trim: true },
     reraStatus: { type: String, trim: true },

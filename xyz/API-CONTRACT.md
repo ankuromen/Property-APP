@@ -51,8 +51,20 @@ This document defines the baseline request/response/error shapes and endpoint gr
 - `POST /properties/submit` — **disabled for guests.** Returns **403**; listing creation is **`POST /api/broker/properties`** (authenticated) only. *(Business rule: guests cannot post properties.)*
 
 ### Leads
-- `POST /leads`
-  - body: `customerName`, `customerPhone`, `propertyId`
+- `POST /leads/send-otp` — body: `customerPhone`, `propertyId` (valid 10-digit Indian mobile). Issues OTP (logged in dev).
+- `POST /leads` — body: `customerName`, `customerPhone`, `propertyId`, `otp`, optional `notes`. Requires OTP from prior step.
+
+---
+
+## Admin (`/api/admin/*`)
+
+Header on all routes: `X-Admin-Key: <ADMIN_API_KEY>` (must match server env).
+
+### Properties
+- `GET /properties` — query: `status` (`Pending` \| `Active` \| `Rejected`), `page`, `limit`
+- `PATCH /properties/:id/approve`
+- `PATCH /properties/:id/reject` — body: `{ reason }`
+- `PATCH /properties/:id/request-verification` — body: `{ message }` (listing stays `Pending`)
 
 ---
 

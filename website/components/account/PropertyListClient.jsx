@@ -66,6 +66,28 @@ export default function PropertyListClient() {
                     {p.transactionType && ` · ${p.transactionType}`}
                     {p.bhk && ` · ${p.bhk} BHK`}
                   </p>
+                  <p className="mt-2">
+                    <span
+                      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+                        p.status === 'Active'
+                          ? 'bg-emerald-100 text-emerald-900'
+                          : p.status === 'Rejected'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-amber-100 text-amber-900'
+                      }`}
+                    >
+                      {p.status === 'Pending'
+                        ? 'Pending review'
+                        : p.status === 'Rejected'
+                          ? 'Rejected'
+                          : 'Live'}
+                    </span>
+                    {p.reviewNotes && p.status !== 'Active' && (
+                      <span className="ml-2 text-xs text-slate-500" title={p.reviewNotes}>
+                        Note from admin
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Link

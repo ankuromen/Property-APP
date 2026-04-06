@@ -7,6 +7,9 @@ website/.next
 website/out
 admin-panel/dist
 
+# Environment — secrets live in each app’s `.env` (not committed)
+.env
+.env.*
 
 # OS
 .DS_Store

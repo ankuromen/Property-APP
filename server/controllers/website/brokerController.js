@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Vendor = require('../../models/Vendor');
 const Property = require('../../models/Property');
+const { planBadgeLabel } = require('../../utils/planBadge');
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id) && new mongoose.Types.ObjectId(id).toString() === id;
 
@@ -30,7 +31,9 @@ exports.list = async (req, res) => {
     ]);
 
     const brokerIds = grouped.map((g) => g._id);
-    const brokers = await Vendor.find({ _id: { $in: brokerIds } }).select('name phone consultationFee subscriptionStatus subscriptionEndsAt').lean();
+    const brokers = await Vendor.find({ _id: { $in: brokerIds } })
+      .select('name phone consultationFee subscriptionStatus subscriptionEndsAt subscriptionPlanId')
+      .lean();
     const brokerMap = new Map(brokers.map((b) => [String(b._id), b]));
 
     const items = grouped
@@ -44,6 +47,7 @@ exports.list = async (req, res) => {
           consultationFee: b.consultationFee,
           subscriptionStatus: b.subscriptionStatus,
           subscriptionEndsAt: b.subscriptionEndsAt,
+          planBadge: planBadgeLabel(b.subscriptionPlanId),
           listingsCount: g.listingsCount,
           primaryCity: g.citySample || null,
           primaryLocality: g.localitySample || null,
@@ -72,8 +76,12 @@ exports.getById = async (req, res) => {
   try {
     if (!isValidId(req.params.id)) return res.status(404).json({ message: 'Broker not found' });
 
-    const broker = await Vendor.findById(req.params.id).select('name phone consultationFee subscriptionStatus subscriptionEndsAt').lean();
+    const broker = await Vendor.findById(req.params.id)
+      .select('name phone consultationFee subscriptionStatus subscriptionEndsAt subscriptionPlanId')
+      .lean();
     if (!broker) return res.status(404).json({ message: 'Broker not found' });
+
+    const brokerOut = { ...broker, planBadge: planBadgeLabel(broker.subscriptionPlanId) };
 
     const properties = await Property.find(
       {
@@ -88,7 +96,7 @@ exports.getById = async (req, res) => {
       .limit(20)
       .lean();
 
-    res.json({ ...broker, properties });
+    res.json({ ...brokerOut, properties });
   } catch (err) {
     res.status(500).json({ message: err.message || 'Failed to get broker profile' });
   }

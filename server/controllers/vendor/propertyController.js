@@ -4,7 +4,19 @@ const Property = require('../../models/Property');
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id) && new mongoose.Types.ObjectId(id).toString() === id;
 
 // Keys that must not be set from req.body (server-controlled)
-const PROTECTED_KEYS = ['vendorId', 'postedByType', 'postedById', 'reviewNotes', 'reviewedBy', 'reviewedAt', '_id', '__v', 'createdAt', 'updatedAt'];
+const PROTECTED_KEYS = [
+  'vendorId',
+  'postedByType',
+  'postedById',
+  'status',
+  'reviewNotes',
+  'reviewedBy',
+  'reviewedAt',
+  '_id',
+  '__v',
+  'createdAt',
+  'updatedAt',
+];
 
 function getEditablePaths() {
   return Object.keys(Property.schema.paths).filter((k) => !PROTECTED_KEYS.includes(k));
@@ -61,7 +73,7 @@ exports.create = async (req, res) => {
     doc.vendorId = req.vendor._id;
     doc.postedByType = 'broker';
     doc.postedById = req.vendor._id;
-    if (!doc.status) doc.status = 'Active';
+    doc.status = 'Pending';
     if (doc.location === undefined && (body.locality || body.city)) {
       doc.location = [body.locality, body.city].filter(Boolean).join(', ');
     }

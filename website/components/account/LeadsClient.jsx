@@ -17,7 +17,7 @@ export default function LeadsClient() {
 
   useEffect(() => {
     apiClient('/api/broker/leads')
-      .then(setLeads)
+      .then((data) => setLeads(Array.isArray(data?.leads) ? data.leads : []))
       .catch(() => setLeads([]))
       .finally(() => setLoading(false));
   }, []);
@@ -44,7 +44,14 @@ export default function LeadsClient() {
               <div key={lead._id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <p className="font-semibold text-slate-900">{lead.customerName}</p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-semibold text-slate-900">{lead.customerName}</p>
+                      {lead.isSpam && (
+                        <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">
+                          SPAM
+                        </span>
+                      )}
+                    </div>
                     <p className="mt-0.5 text-slate-600">{lead.customerPhone}</p>
                     <p className="mt-2 text-sm text-slate-500">
                       {lead.propertyId

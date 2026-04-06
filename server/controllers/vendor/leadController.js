@@ -9,7 +9,8 @@ function isActiveSubscriber(vendor) {
 }
 
 /**
- * GET /api/broker/leads — list all leads for the logged-in broker (full access for now; daily limit later).
+ * GET /api/broker/leads — list all leads for the logged-in broker.
+ * SPAM leads are always shown in full with isSpam flag; they do not consume the free daily non-spam visibility slots.
  */
 exports.list = async (req, res) => {
   try {
@@ -43,16 +44,22 @@ exports.list = async (req, res) => {
     const end = new Date(start);
     end.setDate(end.getDate() + 1);
 
-    let visibleToday = 0;
-    let totalToday = 0;
+    let visibleNonSpamToday = 0;
+    let totalNonSpamToday = 0;
+
     const maskedLeads = leads.map((lead) => {
       const createdAt = new Date(lead.createdAt);
       const isToday = createdAt >= start && createdAt < end;
 
+      if (lead.isSpam) {
+        return { ...lead, isSpam: true };
+      }
+
       if (!isToday) return lead;
-      totalToday += 1;
-      if (visibleToday < 5) {
-        visibleToday += 1;
+
+      totalNonSpamToday += 1;
+      if (visibleNonSpamToday < 5) {
+        visibleNonSpamToday += 1;
         return lead;
       }
 
@@ -69,8 +76,8 @@ exports.list = async (req, res) => {
       leadAccess: {
         subscribed: false,
         freeDailyLimit: 5,
-        visibleToday,
-        totalToday,
+        visibleToday: visibleNonSpamToday,
+        totalToday: totalNonSpamToday,
       },
     });
   } catch (err) {

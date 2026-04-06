@@ -16,6 +16,10 @@ const leadSchema = new mongoose.Schema(
       email: { type: String, trim: true, lowercase: true },
     },
     status: { type: String, enum: ['new', 'contacted', 'closed'], default: 'new' },
+    notes: { type: String, trim: true },
+    /** True when regex spam rules matched; still stored and shown, not counted toward caps. */
+    isSpam: { type: Boolean, default: false },
+    phoneVerified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

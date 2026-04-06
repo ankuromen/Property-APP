@@ -12,7 +12,7 @@
 
 - [x] ✓ **1.1** Finalize product terminology: Vendor -> Broker, User Website -> Public Website, Vendor Panel -> Broker Panel.
 - [x] ✓ **1.2** Freeze system modules: `server`, `website` (public + `/account`), `admin-panel`.
-- [x] ✓ **1.3** Define shared env standards (`.env.example` for each app, API base URLs, JWT secret, DB URI).
+- [x] ✓ **1.3** Define shared env standards (per-app `.env`, API base URLs, JWT secret, DB URI).
 - [x] ✓ **1.4** Confirm route strategy and ownership:
   - Broker APIs: `/api/broker/*`
   - Public APIs: `/api/website/*`

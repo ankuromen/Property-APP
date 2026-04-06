@@ -1,10 +1,12 @@
 const Vendor = require('../../models/Vendor');
+const { planBadgeLabel } = require('../../utils/planBadge');
 
 exports.getProfile = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.vendor._id).select('-password');
     if (!vendor) return res.status(404).json({ message: 'Broker not found' });
-    res.json(vendor);
+    const o = vendor.toObject();
+    res.json({ ...o, planBadge: planBadgeLabel(o.subscriptionPlanId) });
   } catch (err) {
     res.status(500).json({ message: err.message || 'Failed to get profile' });
   }
@@ -31,7 +33,8 @@ exports.updateProfile = async (req, res) => {
     await vendor.save();
 
     const updated = await Vendor.findById(vendor._id).select('-password');
-    res.json(updated);
+    const o = updated.toObject();
+    res.json({ ...o, planBadge: planBadgeLabel(o.subscriptionPlanId) });
   } catch (err) {
     res.status(500).json({ message: err.message || 'Failed to update profile' });
   }

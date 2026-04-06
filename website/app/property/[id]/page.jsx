@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { api, formatPrice, siteUrl } from '@/lib/api';
+import PropertyContactForm from '@/components/PropertyContactForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -49,9 +50,18 @@ export default async function PropertyDetailPage({ params }) {
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <h1 className="text-2xl font-bold">{property.title}</h1>
-      <p className="mt-1 text-slate-600">{[property.locality, property.city, property.state].filter(Boolean).join(', ')}</p>
-      <p className="mt-3 text-xl font-semibold">{formatPrice(property.price)}</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold">{property.title}</h1>
+          <p className="mt-1 text-slate-600">{[property.locality, property.city, property.state].filter(Boolean).join(', ')}</p>
+          <p className="mt-3 text-xl font-semibold">{formatPrice(property.price)}</p>
+        </div>
+        {property.brokerPlanBadge && (
+          <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-900">
+            {property.brokerPlanBadge} plan
+          </span>
+        )}
+      </div>
 
       <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
         {image ? (
@@ -67,6 +77,10 @@ export default async function PropertyDetailPage({ params }) {
         <p className="mt-1 text-sm text-slate-700">Transaction: {property.transactionType || 'N/A'}</p>
         <p className="mt-1 text-sm text-slate-700">BHK: {property.bhk || 'N/A'}</p>
         <p className="mt-3 text-slate-700">{property.description || 'No description added.'}</p>
+      </div>
+
+      <div className="mt-8">
+        <PropertyContactForm propertyId={property._id} />
       </div>
     </main>
   );

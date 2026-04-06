@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Property = require('../../models/Property');
+const Vendor = require('../../models/Vendor');
+const { planBadgeLabel } = require('../../utils/planBadge');
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id) && new mongoose.Types.ObjectId(id).toString() === id;
 
@@ -132,15 +134,28 @@ exports.getById = async (req, res) => {
       _id: id,
       status: 'Active',
       visibility: 'Public',
-    })
-      .select(PUBLIC_PROPERTY_PROJECTION)
-      .lean();
+    }).lean();
 
     if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
 
-    res.json(property);
+    const brokerId = property.postedById || property.vendorId;
+    let brokerPlanBadge = null;
+    if (property.postedByType === 'broker' && brokerId) {
+      const v = await Vendor.findById(brokerId).select('subscriptionPlanId').lean();
+      brokerPlanBadge = planBadgeLabel(v?.subscriptionPlanId);
+    }
+
+    delete property.vendorId;
+    delete property.postedById;
+    delete property.reviewNotes;
+    delete property.reviewedBy;
+    delete property.reviewedAt;
+    delete property.ownerContact;
+    delete property.__v;
+
+    res.json({ ...property, brokerPlanBadge });
   } catch (err) {
     res.status(500).json({ message: err.message || 'Failed to get property' });
   }
