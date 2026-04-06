@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  padding: 2rem;
+  background: #f8fafc;
+  color: #0f172a;
+}
+code {
+  background: #e2e8f0;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+}

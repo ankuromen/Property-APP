@@ -48,9 +48,7 @@ This document defines the baseline request/response/error shapes and endpoint gr
 - `GET /properties`
   - query: `page`, `limit`, `sort`, `order`, `city`, `locality`, `propertyType`, `transactionType`, `minPrice`, `maxPrice`, `bhk`
 - `GET /properties/:id`
-- `POST /properties/submit` (planned in Section 4)
-  - body (planned): `title`, `propertyType`, `price`, `ownerName`, `ownerPhone` (+ optional fields)
-  - expected behavior: creates listing with `status = Pending`
+- `POST /properties/submit` — **disabled for guests.** Returns **403**; listing creation is **`POST /api/broker/properties`** (authenticated) only. *(Business rule: guests cannot post properties.)*
 
 ### Leads
 - `POST /leads`

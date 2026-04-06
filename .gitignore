@@ -1,12 +1,29 @@
 # Dependencies
-/backend/node_modules
-/vendor-panel/node_modules
-/website-nextjs/node_modules
-/broker-panel/node_modules
-/user-website/node_modules
+node_modules
+**/node_modules
 
-/vendor-panel/dist
-/backend/dist
+# Build output
+website/.next
+website/out
+admin-panel/dist
+
 
 # OS
-.DS_Store/website-nextjs/.next
+.DS_Store
+Thumbs.db
+
+# Logs & debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test / coverage
+coverage
+.nyc_output
+
+# Local tooling (optional)
+*.swp
+*.swo
+.idea

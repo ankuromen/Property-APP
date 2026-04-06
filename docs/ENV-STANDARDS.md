@@ -1,33 +1,22 @@
-# Environment Standards
+# Environment standards
 
-This file locks the shared environment conventions across modules.
+## API server (`server/.env`)
 
-## Backend (`backend/.env`)
-Required:
-- `PORT` (default `5000`)
-- `MONGODB_URI`
-- `JWT_SECRET`
+- `PORT` — default `5000`
+- `MONGODB_URI` — MongoDB connection string
+- `JWT_SECRET` — secret for broker/auth tokens
 
-Recommended:
-- `FRONTEND_PUBLIC_URL`
-- `BROKER_PANEL_URL`
+Example: see `server/.env.example` (if present) or create from project docs.
 
-Example file: `backend/.env.example`
+## Public + account website (`website/.env`)
 
-## Public website (`website-nextjs/.env`)
-Required:
-- `NEXT_PUBLIC_API_URL` (e.g. `http://localhost:5000`)
-- `NEXT_PUBLIC_SITE_URL` (e.g. `http://localhost:3000`)
+- `NEXT_PUBLIC_API_URL` — base URL of the API (e.g. `http://localhost:5000`)
+- `NEXT_PUBLIC_SITE_URL` — canonical site URL for metadata/sitemap (e.g. `http://localhost:3000`)
 
-Example file: `website-nextjs/.env.example`
+Example file: `website/.env.example`
 
-## Broker panel (`broker-panel/.env`)
-Required:
-- `VITE_API_URL` (e.g. `http://localhost:5000`)
+## Admin panel (`admin-panel/.env`)
 
-Example file: `broker-panel/.env.example`
+- `VITE_API_URL` — API base URL for admin calls
 
-## Security rules
-- Never commit real `.env` files.
-- Commit only `.env.example` with placeholder values.
-- Rotate `JWT_SECRET` if accidentally exposed.
+Example file: `admin-panel/.env.example`

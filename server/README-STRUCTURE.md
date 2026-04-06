@@ -1,10 +1,11 @@
 # Backend structure — modules (isolated)
 
-Each module (**vendor**, **admin**, **website**) has its **own controllers, routes, and API base path**. Changes in one module do not conflict with or affect the others.
+Each module (**vendor**, **admin**, **website**, **broker**) has its **own controllers, routes, and API base path**. Changes in one module do not conflict with or affect the others.
 
 ## Principle: module isolation
 
-- **Vendor** → only `controllers/vendor/` + `routes/vendor/` → only `/api/vendor/*`
+- **Broker** (primary) → `controllers/broker/` + `routes/broker/` → `/api/broker/*`
+- **Vendor** (legacy) → only `controllers/vendor/` + `routes/vendor/` → only `/api/vendor/*`
 - **Admin** → only `controllers/admin/` + `routes/admin/` → only `/api/admin/*`
 - **Website** → only `controllers/website/` + `routes/website/` → only `/api/website/*`
 
@@ -19,7 +20,7 @@ No shared route files or controller files across modules. Each module is self-co
 
 ```
 controllers/
-  vendor/          # Only vendor-panel logic
+  vendor/          # Legacy `/api/vendor/*` (website account uses `/api/broker/*`)
     authController.js
     (later: propertyController.js, leadController.js, ...)
   admin/           # Only admin-panel logic

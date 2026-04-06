@@ -1,6 +1,6 @@
 # Implementation List — Property Platform (Broker + Owner Model)
 
-**Goal:** Build a marketplace where users can browse properties, owners and brokers can post properties, and brokers can monetize through lead access, visibility, and paid consultation bookings.
+**Goal:** Build a **marketplace platform** where users browse properties, owners and brokers post listings, and monetization is through **platform** levers (lead-access plans, visibility, optional booking facilitation)—not the platform acting as a property consultant.
 
 **Website stack:** **Next.js + Tailwind CSS** with **SEO-first implementation**.
 
@@ -11,7 +11,7 @@
 ## 1. Foundation and Architecture
 
 - [x] ✓ **1.1** Finalize product terminology: Vendor -> Broker, User Website -> Public Website, Vendor Panel -> Broker Panel.
-- [x] ✓ **1.2** Freeze system modules: `backend`, `website-nextjs`, `broker-panel`, optional `admin-panel`.
+- [x] ✓ **1.2** Freeze system modules: `server`, `website` (public + `/account`), `admin-panel`.
 - [x] ✓ **1.3** Define shared env standards (`.env.example` for each app, API base URLs, JWT secret, DB URI).
 - [x] ✓ **1.4** Confirm route strategy and ownership:
   - Broker APIs: `/api/broker/*`
@@ -104,7 +104,7 @@
 
 ## 8. Public Website (Next.js + Tailwind + SEO)
 
-- [x] ✓ **8.1** Initialize `website-nextjs` with App Router + Tailwind.
+- [x] ✓ **8.1** Initialize `website` (Next.js App Router + Tailwind) with integrated account area.
 - [x] ✓ **8.2** Build pages:
   - Home (SEO landing)
   - Browse listings
@@ -125,15 +125,16 @@
 
 ---
 
-## 9. Broker Panel (Rename + Expand Existing Vendor Panel)
+## 9. Account on website (broker/owner hub + expand)
 
-- [ ] **9.1** Rename branding/routes/UI text: Vendor Panel -> Broker Panel.
-- [ ] **9.2** Keep existing modules: auth, properties, profile, leads.
+- [x] ✓ **9.0** Unified **website** app: public pages + `/account` (auth, properties, profile, leads) — no separate broker panel app.
+- [ ] **9.1** Branding and copy: broker/owner roles clearly in account UI.
+- [ ] **9.2** Keep modules: auth, properties, profile, leads (already in `/account`).
 - [ ] **9.3** Add broker settings for consultation fee and availability slots.
-- [ ] **9.4** Add subscription status + upgrade flow in panel.
+- [ ] **9.4** Add subscription status + upgrade flow in account.
 - [ ] **9.5** Add booking inbox (paid visit/consultation requests).
 
-**Checkpoint:** Broker can manage listings, leads, booking fees, and paid consultations.
+**Checkpoint:** Brokers/owners manage listings, leads, booking fees, and paid consultations from the same site.
 
 ---
 
