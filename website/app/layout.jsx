@@ -1,9 +1,13 @@
-import { Inter } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import './globals.css';
 import Providers from './providers';
 import AppShell from './AppShell';
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' });
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
@@ -29,8 +33,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className="[color-scheme:light]" suppressHydrationWarning>
+      <body
+        className={`${poppins.className} min-h-screen bg-slate-50 font-sans text-slate-900 antialiased`}
+        suppressHydrationWarning
+      >
         <Providers>
           <AppShell>{children}</AppShell>
         </Providers>

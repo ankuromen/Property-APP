@@ -54,17 +54,58 @@ This document defines the baseline request/response/error shapes and endpoint gr
 - `POST /leads/send-otp` — body: `customerPhone`, `propertyId` (valid 10-digit Indian mobile). Issues OTP (logged in dev).
 - `POST /leads` — body: `customerName`, `customerPhone`, `propertyId`, `otp`, optional `notes`. Requires OTP from prior step.
 
+### Plans (public pricing snapshot)
+- `GET /plans` — returns `{ plans: [...] }` for plans with `isActive` and `showOnWebsite`. Used by marketing pages (e.g. `/post-property`). Fields include `code`, `name`, `description`, `priceAmount` (INR), `billingCycle` (`none` \| `monthly` \| `quarterly` \| `half_yearly` \| `yearly`), `leadCapPerListing` (`-1` = unlimited), `profileQuota`.
+
 ---
 
 ## Admin (`/api/admin/*`)
 
-Header on all routes: `X-Admin-Key: <ADMIN_API_KEY>` (must match server env).
+### Auth (no prior header)
+- `POST /auth/login` — body: `{ loginId, password }` (`loginId` = super admin **email** in MongoDB `AdminUser`). Returns `{ token }` (JWT, ~8h). Bootstrap with `npm run seed:admin` in `server/`. Admin UI uses `Authorization: Bearer <token>`.
+
+### Protected routes
+- `Authorization: Bearer <token>` from `/auth/login`.
 
 ### Properties
 - `GET /properties` — query: `status` (`Pending` \| `Active` \| `Rejected`), `page`, `limit`
 - `PATCH /properties/:id/approve`
 - `PATCH /properties/:id/reject` — body: `{ reason }`
 - `PATCH /properties/:id/request-verification` — body: `{ message }` (listing stays `Pending`)
+
+### Plans (subscription tiers)
+- `GET /plans` — list all plans (admin)
+- `POST /plans` — create (body: `code`, `name`, optional `description`, `priceAmount`, `billingCycle`, `leadCapPerListing`, `profileQuota`, `sortOrder`, `isActive`, `showOnWebsite`)
+- `GET /plans/:id`
+- `PATCH /plans/:id`
+- `DELETE /plans/:id` — blocked if any broker account’s `subscriptionPlanId` matches this plan’s `code` (case-insensitive)
+
+### Locations (hierarchy: Country → State → City → Locality)
+
+All under `/api/admin/locations`, JWT required. Names are unique within their parent (e.g. one `Gurgaon` per state). **Cities** and **localities** require `latitude` and `longitude` (WGS84).
+
+| Method | Path | Notes |
+|--------|------|--------|
+| `GET` | `/locations/countries` | List countries |
+| `POST` | `/locations/countries` | body: `{ name }` |
+| `GET` | `/locations/countries/:id` | |
+| `PATCH` | `/locations/countries/:id` | body: `{ name }` |
+| `DELETE` | `/locations/countries/:id` | Fails if states exist |
+| `GET` | `/locations/states?countryId=` | |
+| `POST` | `/locations/states` | body: `{ countryId, name }` |
+| `GET` | `/locations/states/:id` | |
+| `PATCH` | `/locations/states/:id` | body: `{ name }` |
+| `DELETE` | `/locations/states/:id` | Fails if cities exist |
+| `GET` | `/locations/cities?stateId=` | |
+| `POST` | `/locations/cities` | body: `{ stateId, name, latitude, longitude }` |
+| `GET` | `/locations/cities/:id` | |
+| `PATCH` | `/locations/cities/:id` | body: `{ name, latitude, longitude }` |
+| `DELETE` | `/locations/cities/:id` | Fails if localities exist |
+| `GET` | `/locations/localities?cityId=` | |
+| `POST` | `/locations/localities` | body: `{ cityId, name, latitude, longitude }` |
+| `GET` | `/locations/localities/:id` | |
+| `PATCH` | `/locations/localities/:id` | body: `{ name, latitude, longitude }` |
+| `DELETE` | `/locations/localities/:id` | |
 
 ---
 

@@ -1,17 +1,15 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  color-scheme: light;
+/* Poppins everywhere — loaded via `next/font` on `<body>`; theme aligns `font-sans` utilities */
+@theme {
+  --font-sans:
+    'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  background: #f8fafc;
-  color: #0f172a;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
+/* Tailwind-only: preflight + utilities; base resets use @apply */
+@layer base {
+  a {
+    @apply text-inherit no-underline;
+  }
 }

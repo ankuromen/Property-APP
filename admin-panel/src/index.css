@@ -1,18 +1,14 @@
-* {
-  box-sizing: border-box;
+@import 'tailwindcss';
+
+@theme {
+  --font-sans:
+    'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
-body {
-  margin: 0;
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-  padding: 2rem;
-  background: #f8fafc;
-  color: #0f172a;
-}
-code {
-  background: #e2e8f0;
-  padding: 0.15rem 0.35rem;
-  border-radius: 4px;
+
+/* Tailwind-only: preflight + utilities; base uses @apply */
+@layer base {
+  body {
+    @apply m-0 min-h-screen bg-slate-100 font-sans text-slate-900 antialiased;
+  }
 }
