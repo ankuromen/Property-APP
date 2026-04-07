@@ -22,9 +22,20 @@ export default function Sidebar() {
           <span aria-hidden>◇</span>
           Properties
         </NavLink>
-        <NavLink to="/locations" className={linkClass} end={false}>
-          <span aria-hidden>◇</span>
+        <p className="mb-1 mt-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
           Locations
+        </p>
+        <NavLink to="/locations/states" className={linkClass} end>
+          <span aria-hidden>◇</span>
+          States
+        </NavLink>
+        <NavLink to="/locations/cities" className={linkClass} end>
+          <span aria-hidden>◇</span>
+          Cities
+        </NavLink>
+        <NavLink to="/locations/localities" className={linkClass} end>
+          <span aria-hidden>◇</span>
+          Localities
         </NavLink>
         <NavLink to="/plans" className={linkClass} end={false}>
           <span aria-hidden>◇</span>

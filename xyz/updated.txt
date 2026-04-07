@@ -1,0 +1,239 @@
+# 🏡 Real Estate Marketplace – Business Architecture (V1 Simplified)
+
+---
+
+## Positioning
+
+You are building a **marketplace platform**:
+
+- Connect customers with brokers/agents and property owners  
+- Provide listings, discovery, and lead generation  
+- Monetize via **lead access + visibility**  
+
+You are **NOT**:
+- A consultancy  
+- A property advisor  
+- A broker  
+
+---
+
+# 👤 POV 1 — Customer (Buyer / Tenant)
+
+## What they can do
+
+- Browse properties without login  
+- Search by:
+  - City  
+  - Locality  
+  - Budget  
+
+- View property details:
+  - Price  
+  - Location  
+  - Description  
+  - Who posted (broker or owner)
+
+- Contact via:
+  - “Contact” button  
+
+---
+
+## Lead Submission (OTP Verified)
+
+- Customer enters:
+  - Name  
+  - Phone number  
+
+- OTP is sent to phone  
+- Lead is **valid only after OTP verification**
+
+---
+
+## What they experience
+
+- Simple browsing  
+- Clear listing ownership (broker or owner)  
+- Real, verified listings (admin-approved)  
+- No duplicate listings  
+
+---
+
+# 🧑‍💼 POV 2 — Vendor (Broker / Agent / Owner)
+
+## Who this is
+
+- Brokers / agents  
+- Property owners  
+
+👉 Both are treated as **vendors**
+
+---
+
+## What they can do
+
+- Create account  
+- Post properties (unlimited, free)  
+- Manage listings  
+- Receive leads  
+- View leads (based on plan)
+
+---
+
+## Listing Rules (Simplified)
+
+- **One property = one listing**
+- No joint listing (no broker-owner merge for now)
+- Each listing belongs to:
+  - Either broker OR owner  
+
+---
+
+## Listing Visibility
+
+- Every listing is:
+  - Reviewed by admin  
+  - Approved before going live  
+
+### Admin actions:
+- Approve  
+- Reject (with reason)  
+- Ask for more verification  
+
+---
+
+## Lead Access (Core Monetization)
+
+- Vendors can view:
+  - **Only 5 leads per listing (Free plan)**  
+
+- After limit:
+  - Contact details are locked  
+  - Message shown:
+    > “Upgrade to unlock more leads”
+
+---
+
+## Subscription Model (Simplified)
+
+### Plans:
+
+| Plan | Leads per Listing | Price |
+|------|------------------|-------|
+| Free | 5 leads          | ₹0    |
+| Paid | Unlimited        | ₹499–₹999 |
+
+---
+
+## Benefits of Paid Plan
+
+- Unlimited leads  
+- Higher ranking in search  
+- Better visibility  
+
+---
+
+## Search Visibility Logic
+
+### Ranking Priority:
+
+1. Paid users  
+2. Free users  
+
+👉 Paid vendors get:
+- More visibility  
+- More leads  
+
+---
+
+## Lead Inbox
+
+- Vendors can see:
+  - Customer name  
+  - Phone  
+  - Property reference  
+
+- OTP ensures:
+  - Leads are real  
+  - Higher conversion  
+
+---
+
+# 📞 Callback Request (Simplified Booking)
+
+Instead of consultation:
+
+- Customer can:
+  > “Request Callback”
+
+- Vendor receives:
+  - Lead with callback intent  
+
+👉 No scheduling complexity in V1  
+
+---
+
+# 🛠️ POV 3 — Admin (Platform Operator)
+
+## Responsibilities
+
+- Approve/reject listings  
+- Maintain quality  
+- Monitor leads  
+- Manage users  
+- Control subscriptions  
+
+---
+
+## Moderation
+
+- Every listing must be approved  
+- No listing goes live without admin approval  
+
+---
+
+## Plan Configuration
+
+Admin controls:
+- Lead limits  
+- Pricing  
+- Plan availability  
+
+---
+
+## Payments
+
+- Payment provider: Razorpay  
+- Users pay for:
+  - Subscription upgrade  
+
+---
+
+## Renewal Logic
+
+- Subscription valid for fixed duration  
+- On expiry:
+  - User returns to Free plan  
+
+---
+
+# 🔗 How System Works Together
+
+- Customers → generate leads  
+- Vendors → receive leads  
+- Platform → restricts access  
+- Vendors → pay to unlock  
+
+---
+
+# 💡 Core Business Model
+
+- Free listings → attract vendors  
+- Customers → generate demand  
+- Lead restriction → creates urgency  
+- Subscription → unlocks value  
+
+---
+
+# 🚀 One-Line Summary
+
+Free property listings attract supply, customers generate leads, and revenue comes from charging vendors to access and convert those leads.

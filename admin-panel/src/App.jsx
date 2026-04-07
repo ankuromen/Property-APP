@@ -1,10 +1,14 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AdminAuthProvider } from './context/AdminAuthContext';
+import { LocationsModuleProvider } from './context/LocationsModuleContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminLayout from './components/layout/AdminLayout';
 import LoginPage from './pages/LoginPage';
 import PropertiesPage from './pages/PropertiesPage';
-import LocationsPage from './pages/LocationsPage';
+import LocationsLayout from './pages/locations/LocationsLayout';
+import LocationStatesPage from './pages/locations/LocationStatesPage';
+import LocationCitiesPage from './pages/locations/LocationCitiesPage';
+import LocationLocalitiesPage from './pages/locations/LocationLocalitiesPage';
 import PlansPage from './pages/PlansPage';
 
 export default function App() {
@@ -23,7 +27,19 @@ export default function App() {
           >
             <Route index element={<Navigate to="/properties" replace />} />
             <Route path="properties" element={<PropertiesPage />} />
-            <Route path="locations" element={<LocationsPage />} />
+            <Route
+              path="locations"
+              element={
+                <LocationsModuleProvider>
+                  <LocationsLayout />
+                </LocationsModuleProvider>
+              }
+            >
+              <Route index element={<Navigate to="states" replace />} />
+              <Route path="states" element={<LocationStatesPage />} />
+              <Route path="cities" element={<LocationCitiesPage />} />
+              <Route path="localities" element={<LocationLocalitiesPage />} />
+            </Route>
             <Route path="plans" element={<PlansPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
