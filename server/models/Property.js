@@ -136,9 +136,9 @@ const propertySchema = new mongoose.Schema(
     documentUrls: [{ type: String }],
 
     // —— Listing source & ownership ——
-    vendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' }, // legacy owner pointer (required for broker-posted listings)
+    vendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // legacy owner pointer (required for broker-posted listings)
     postedByType: { type: String, enum: ['broker', 'owner'], default: 'broker' },
-    postedById: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+    postedById: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     ownerContact: {
       name: { type: String, trim: true },
       phone: { type: String, trim: true },
@@ -148,7 +148,7 @@ const propertySchema = new mongoose.Schema(
 
     // —— Moderation ——
     reviewNotes: { type: String, trim: true },
-    reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+    reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     reviewedAt: { type: Date },
 
     // —— Discovery ——

@@ -256,10 +256,10 @@ export default async function HomePage() {
             Browse listings
           </Link>
           <Link
-            href="/account/register"
+            href="/sign-in"
             className="rounded-xl border border-white/25 px-6 py-3 font-semibold text-white hover:bg-white/10"
           >
-            Create account
+            Sign in
           </Link>
         </div>
       </section>

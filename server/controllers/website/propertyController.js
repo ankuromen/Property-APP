@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Property = require('../../models/Property');
-const Vendor = require('../../models/Vendor');
+const User = require('../../models/User');
 const { planBadgeLabel } = require('../../utils/planBadge');
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id) && new mongoose.Types.ObjectId(id).toString() === id;
@@ -143,7 +143,7 @@ exports.getById = async (req, res) => {
     const brokerId = property.postedById || property.vendorId;
     let brokerPlanBadge = null;
     if (property.postedByType === 'broker' && brokerId) {
-      const v = await Vendor.findById(brokerId).select('subscriptionPlanId').lean();
+      const v = await User.findById(brokerId).select('subscriptionPlanId').lean();
       brokerPlanBadge = planBadgeLabel(v?.subscriptionPlanId);
     }
 

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bookingSchema = new mongoose.Schema(
   {
     propertyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Property', required: true },
-    brokerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true },
+    brokerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     customerName: { type: String, required: true, trim: true },
     customerPhone: { type: String, required: true, trim: true },
     bookingType: { type: String, enum: ['consultation', 'visit'], default: 'consultation' },

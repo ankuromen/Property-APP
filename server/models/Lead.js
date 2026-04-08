@@ -6,9 +6,9 @@ const leadSchema = new mongoose.Schema(
     customerPhone: { type: String, required: true, trim: true },
     propertyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Property', required: true },
     // Legacy broker pointer; kept for compatibility with existing queries.
-    vendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+    vendorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     // New broker destination pointer.
-    brokerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+    brokerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     destinationType: { type: String, enum: ['broker', 'owner'], required: true, default: 'broker' },
     ownerContactSnapshot: {
       name: { type: String, trim: true },

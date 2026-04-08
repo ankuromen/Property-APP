@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Vendor = require('../models/Vendor');
+const User = require('../models/User');
 
 async function resolveActor(req, res, next, actorKey) {
   let token = null;
@@ -14,14 +14,14 @@ async function resolveActor(req, res, next, actorKey) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const vendor = await Vendor.findById(decoded.id).select('-password');
-    if (!vendor) {
+    const user = await User.findById(decoded.id).select('-password');
+    if (!user) {
       return res.status(401).json({ message: 'Account not found.' });
     }
 
     // Backward compatible assignment for existing controllers.
-    req.vendor = vendor;
-    if (actorKey) req[actorKey] = vendor;
+    req.vendor = user;
+    if (actorKey) req[actorKey] = user;
 
     return next();
   } catch (err) {

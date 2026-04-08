@@ -13,7 +13,7 @@ export default function ProtectedAccount({ children }) {
     if (!ready) return;
     if (!isAuthenticated) {
       const from = encodeURIComponent(pathname || '/account');
-      router.replace(`/account/login?from=${from}`);
+      router.replace(`/sign-in?from=${from}`);
     }
   }, [ready, isAuthenticated, router, pathname]);
 

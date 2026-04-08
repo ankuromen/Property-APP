@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Vendor = require('../../models/Vendor');
+const User = require('../../models/User');
 const Property = require('../../models/Property');
 const { planBadgeLabel } = require('../../utils/planBadge');
 
@@ -31,7 +31,7 @@ exports.list = async (req, res) => {
     ]);
 
     const brokerIds = grouped.map((g) => g._id);
-    const brokers = await Vendor.find({ _id: { $in: brokerIds } })
+    const brokers = await User.find({ _id: { $in: brokerIds } })
       .select('name phone consultationFee subscriptionStatus subscriptionEndsAt subscriptionPlanId')
       .lean();
     const brokerMap = new Map(brokers.map((b) => [String(b._id), b]));
@@ -76,7 +76,7 @@ exports.getById = async (req, res) => {
   try {
     if (!isValidId(req.params.id)) return res.status(404).json({ message: 'Broker not found' });
 
-    const broker = await Vendor.findById(req.params.id)
+    const broker = await User.findById(req.params.id)
       .select('name phone consultationFee subscriptionStatus subscriptionEndsAt subscriptionPlanId')
       .lean();
     if (!broker) return res.status(404).json({ message: 'Broker not found' });

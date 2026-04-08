@@ -6,10 +6,11 @@ import SiteHeader from './components/SiteHeader';
 export default function AppShell({ children }) {
   const pathname = usePathname();
   const hideChrome =
-    pathname === '/account/login' ||
-    pathname === '/account/register' ||
-    pathname?.startsWith('/account/login') ||
-    pathname?.startsWith('/account/register');
+    pathname === '/sign-in' ||
+    pathname === '/sign-up' ||
+    pathname?.startsWith('/account') ||
+    pathname?.startsWith('/sign-in') ||
+    pathname?.startsWith('/sign-up');
 
   return (
     <>

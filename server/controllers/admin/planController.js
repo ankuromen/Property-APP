@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Plan = require('../../models/Plan');
-const Vendor = require('../../models/Vendor');
+const User = require('../../models/User');
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id) && new mongoose.Types.ObjectId(id).toString() === id;
 
@@ -111,7 +111,7 @@ exports.remove = async (req, res) => {
     const plan = await Plan.findById(req.params.id);
     if (!plan) return res.status(404).json({ message: 'Plan not found' });
     const escaped = plan.code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const inUse = await Vendor.exists({ subscriptionPlanId: new RegExp(`^${escaped}$`, 'i') });
+    const inUse = await User.exists({ subscriptionPlanId: new RegExp(`^${escaped}$`, 'i') });
     if (inUse) {
       return res.status(400).json({
         message: 'Cannot delete: accounts reference this plan. Deactivate it or reassign subscribers first.',

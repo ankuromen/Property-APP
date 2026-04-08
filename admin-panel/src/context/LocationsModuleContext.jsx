@@ -91,6 +91,14 @@ export function LocationsModuleProvider({ children }) {
     loadCountries();
   }, [loadCountries]);
 
+  // UX: when countries first load, auto-select the first one so "Add state" is enabled.
+  // This avoids forcing users to click a country before they can create states.
+  useEffect(() => {
+    if (!countryId && countries.length > 0) {
+      setCountryId(countries[0]._id);
+    }
+  }, [countries, countryId]);
+
   useEffect(() => {
     setStateId('');
     setCityId('');
@@ -106,6 +114,13 @@ export function LocationsModuleProvider({ children }) {
     setLocalities([]);
     if (stateId) loadCities(stateId);
   }, [stateId, loadCities]);
+
+  // UX: when states first load for the selected country, auto-select the first state.
+  useEffect(() => {
+    if (!stateId && states.length > 0) {
+      setStateId(states[0]._id);
+    }
+  }, [states, stateId]);
 
   useEffect(() => {
     setLocalities([]);

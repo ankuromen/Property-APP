@@ -1,9 +1,11 @@
 const express = require('express');
-const authController = require('../../controllers/broker/authController');
+const otpAuthController = require('../../controllers/broker/otpAuthController');
 
 const router = express.Router();
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
+router.post('/check-phone', otpAuthController.checkPhone);
+router.post('/login/verify-otp', otpAuthController.loginVerifyOtp);
+router.post('/signup', otpAuthController.signup);
+router.post('/signup/verify-otp', otpAuthController.signupVerifyOtp);
 
 module.exports = router;

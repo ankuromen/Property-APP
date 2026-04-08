@@ -1,5 +1,5 @@
 const Lead = require('../../models/Lead');
-const Vendor = require('../../models/Vendor');
+const User = require('../../models/User');
 
 function isActiveSubscriber(vendor) {
   if (!vendor) return false;
@@ -14,7 +14,7 @@ function isActiveSubscriber(vendor) {
  */
 exports.list = async (req, res) => {
   try {
-    const broker = await Vendor.findById(req.vendor._id).select(
+    const broker = await User.findById(req.vendor._id).select(
       'subscriptionStatus subscriptionEndsAt'
     );
     const subscribed = isActiveSubscriber(broker);

@@ -5,6 +5,16 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatPrice } from '@/lib/api';
 
+import HeroSection from './components/HeroSection';
+import PositioningSection from './components/PositioningSection';
+import AudienceSection from './components/AudienceSection';
+import OfferSection from './components/OfferSection';
+import FlowSection from './components/FlowSection';
+import FAQSection from './components/FAQSection';
+import PlansSection from './components/PlansSection';
+import CTASection from './components/CTASection';
+import StickyCta from './components/StickyCta';
+
 const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 function billingSuffix(cycle) {
@@ -111,7 +121,7 @@ function SectionHeading({ eyebrow, title, subtitle }) {
   );
 }
 
-export default function PostPropertyLanding() {
+function PostPropertyLandingOld() {
   const [audience, setAudience] = useState('broker');
   const [openFaq, setOpenFaq] = useState(0);
   const [stickyCta, setStickyCta] = useState(false);
@@ -136,6 +146,14 @@ export default function PostPropertyLanding() {
       cancelled = true;
     };
   }, []);
+
+  function descriptionLines(description) {
+    const text = String(description || '');
+    return text
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean);
+  }
 
   useEffect(() => {
     const onScroll = () => {
@@ -182,16 +200,16 @@ export default function PostPropertyLanding() {
 
               <div className="mt-10 flex flex-wrap gap-3">
                 <Link
-                  href="/account/register"
+                  href="/sign-in?from=/account/properties/new"
                   className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 px-7 py-3.5 text-base font-semibold text-slate-950 shadow-lg shadow-amber-500/25 transition hover:scale-[1.02] hover:shadow-xl hover:shadow-amber-500/30 active:scale-[0.98]"
                 >
-                  Create free account
+                  Get started
                   <span className="transition group-hover:translate-x-0.5" aria-hidden>
                     →
                   </span>
                 </Link>
                 <Link
-                  href="/account/login?from=/account/properties/new"
+                  href="/sign-in?from=/account/properties/new"
                   className="inline-flex items-center justify-center rounded-2xl border border-white/25 bg-white/10 px-7 py-3.5 text-base font-semibold text-white backdrop-blur-md transition hover:border-white/40 hover:bg-white/15"
                 >
                   Log in to list
@@ -545,6 +563,7 @@ export default function PostPropertyLanding() {
               <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {publicPlans.map((p) => {
                   const free = p.billingCycle === 'none' || !p.priceAmount;
+                  const descPoints = descriptionLines(p.description);
                   return (
                     <li
                       key={p.code}
@@ -563,9 +582,13 @@ export default function PostPropertyLanding() {
                           </>
                         )}
                       </p>
-                      {p.description && (
-                        <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{p.description}</p>
-                      )}
+                      {descPoints.length > 0 ? (
+                        <ul className="mt-3 flex-1 space-y-1 text-sm leading-relaxed text-slate-600">
+                          {descPoints.map((line, idx) => (
+                            <li key={`${p.code}-d-${idx}`}>{line}</li>
+                          ))}
+                        </ul>
+                      ) : null}
                       <ul className="mt-4 space-y-1.5 border-t border-slate-100 pt-4 text-xs text-slate-600">
                         <li>
                           <span className="font-medium text-slate-700">Leads per listing:</span>{' '}
@@ -583,12 +606,7 @@ export default function PostPropertyLanding() {
               </ul>
             )}
 
-            {!plansLoading && publicPlans.length === 0 && (
-              <p className="mt-10 rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-8 text-center text-sm text-slate-500">
-                No plans are published for the website yet. Add plans in the admin under <strong>Plans</strong> and enable
-                &quot;Show on website&quot;, or run <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs">npm run seed:plans</code> in the API server folder.
-              </p>
-            )}
+            {/* If no plans are published, keep the section visually clean (no extra helper copy). */}
           </div>
         </section>
 
@@ -602,13 +620,13 @@ export default function PostPropertyLanding() {
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link
-                href="/account/register"
+                href="/sign-in?from=/account/properties/new"
                 className="inline-flex rounded-2xl bg-amber-400 px-8 py-3.5 text-base font-semibold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-300"
               >
-                Create account
+                Get started
               </Link>
               <Link
-                href="/account/login?from=/account/properties/new"
+                href="/sign-in?from=/account/properties/new"
                 className="inline-flex rounded-2xl border border-white/30 bg-white/5 px-8 py-3.5 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/10"
               >
                 Already registered — log in
@@ -631,13 +649,13 @@ export default function PostPropertyLanding() {
           </p>
           <div className="flex flex-wrap gap-2">
             <Link
-              href="/account/register"
+              href="/sign-in?from=/account/properties/new"
               className="inline-flex rounded-xl bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-amber-300"
             >
               Get started
             </Link>
             <Link
-              href="/account/login?from=/account/properties/new"
+              href="/sign-in?from=/account/properties/new"
               className="inline-flex rounded-xl border border-white/25 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
             >
               Log in
@@ -645,6 +663,43 @@ export default function PostPropertyLanding() {
           </div>
         </div>
       </div>
+    </>
+  );
+}
+
+export default function PostPropertyLanding() {
+  const [stickyCta, setStickyCta] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      const doc = document.documentElement;
+      const nearBottom = y + window.innerHeight > doc.scrollHeight - 280;
+      setStickyCta(y > 420 && !nearBottom);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <>
+      <main
+        className={`overflow-hidden transition-[padding] duration-300 ${
+          stickyCta ? 'pb-24 md:pb-28' : ''
+        }`}
+      >
+        <HeroSection />
+        <PositioningSection />
+        <AudienceSection />
+        <OfferSection />
+        <FlowSection />
+        <FAQSection />
+        <PlansSection />
+        <CTASection />
+      </main>
+      <StickyCta visible={stickyCta} />
     </>
   );
 }

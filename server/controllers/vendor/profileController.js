@@ -1,9 +1,9 @@
-const Vendor = require('../../models/Vendor');
+const User = require('../../models/User');
 const { planBadgeLabel } = require('../../utils/planBadge');
 
 exports.getProfile = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.vendor._id).select('-password');
+    const vendor = await User.findById(req.vendor._id).select('-password');
     if (!vendor) return res.status(404).json({ message: 'Broker not found' });
     const o = vendor.toObject();
     res.json({ ...o, planBadge: planBadgeLabel(o.subscriptionPlanId) });
@@ -14,7 +14,7 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.vendor._id);
+    const vendor = await User.findById(req.vendor._id);
     if (!vendor) return res.status(404).json({ message: 'Broker not found' });
 
     const { name, email, phone, consultationFee } = req.body;
@@ -26,13 +26,13 @@ exports.updateProfile = async (req, res) => {
       vendor.consultationFee = fee;
     }
     if (email !== undefined && email.trim() !== vendor.email) {
-      const existing = await Vendor.findOne({ email: email.trim().toLowerCase() });
+      const existing = await User.findOne({ email: email.trim().toLowerCase() });
       if (existing) return res.status(400).json({ message: 'Email already in use' });
       vendor.email = email.trim().toLowerCase();
     }
     await vendor.save();
 
-    const updated = await Vendor.findById(vendor._id).select('-password');
+    const updated = await User.findById(vendor._id).select('-password');
     const o = updated.toObject();
     res.json({ ...o, planBadge: planBadgeLabel(o.subscriptionPlanId) });
   } catch (err) {
@@ -50,7 +50,7 @@ exports.updatePassword = async (req, res) => {
       return res.status(400).json({ message: 'New password must be at least 6 characters' });
     }
 
-    const vendor = await Vendor.findById(req.vendor._id).select('+password');
+    const vendor = await User.findById(req.vendor._id).select('+password');
     if (!vendor) return res.status(404).json({ message: 'Broker not found' });
 
     const match = await vendor.matchPassword(currentPassword);
@@ -66,7 +66,7 @@ exports.updatePassword = async (req, res) => {
 
 exports.getSubscriptionStatus = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.vendor._id).select(
+    const vendor = await User.findById(req.vendor._id).select(
       'subscriptionStatus subscriptionPlanId subscriptionStartAt subscriptionEndsAt'
     );
     if (!vendor) return res.status(404).json({ message: 'Broker not found' });

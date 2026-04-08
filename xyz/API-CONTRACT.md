@@ -18,12 +18,19 @@ This document defines the baseline request/response/error shapes and endpoint gr
 ---
 
 ## Broker auth (`/api/broker/auth`)
-- `POST /register`
-  - body: `name`, `email`, `phone`, `password`
-  - success: `{ user: { id, name, email, phone }, token }`
-- `POST /login`
-  - body: `email`, `password`
-  - success: `{ user: { id, name, email, phone }, token }`
+- `POST /check-phone`
+  - body: `{ phone }` (10-digit Indian mobile)
+  - if user exists: sends OTP (MSG91) and returns `{ "exists": true, "message": "OTP sent successfully" }`
+  - if not: returns `{ "exists": false }` (no OTP)
+- `POST /login/verify-otp`
+  - body: `{ phone, otp }`
+  - success: `{ user: { id, name, email?, phone, roles }, token }`
+- `POST /signup`
+  - body: `{ fullName, phone, email? }`
+  - sends OTP and returns `{ message: "OTP sent successfully" }`
+- `POST /signup/verify-otp`
+  - body: `{ phone, otp }`
+  - success: `{ user: { id, name, email?, phone, roles }, token }`
 
 ## Broker profile (`/api/broker/profile`)
 - `GET /`

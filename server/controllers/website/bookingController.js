@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Booking = require('../../models/Booking');
 const Property = require('../../models/Property');
-const Vendor = require('../../models/Vendor');
+const User = require('../../models/User');
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id) && new mongoose.Types.ObjectId(id).toString() === id;
 
@@ -24,7 +24,7 @@ exports.createOrder = async (req, res) => {
     const brokerId = property.postedById || property.vendorId;
     if (!brokerId) return res.status(400).json({ message: 'Broker mapping not found for this property' });
 
-    const broker = await Vendor.findById(brokerId).select('consultationFee').lean();
+    const broker = await User.findById(brokerId).select('consultationFee').lean();
     if (!broker) return res.status(404).json({ message: 'Broker not found' });
 
     const booking = await Booking.create({
