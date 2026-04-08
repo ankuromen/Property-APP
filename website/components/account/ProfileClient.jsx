@@ -8,12 +8,9 @@ export default function ProfileClient() {
   const { updateUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [passwordSaving, setPasswordSaving] = useState(false);
   const [error, setError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [message, setMessage] = useState('');
   const [profile, setProfile] = useState({ name: '', email: '', phone: '' });
-  const [password, setPassword] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
   useEffect(() => {
     apiClient('/api/broker/profile')
@@ -39,30 +36,6 @@ export default function ProfileClient() {
       })
       .catch((err) => setError(err.message || 'Update failed'))
       .finally(() => setSaving(false));
-  }
-
-  function handlePasswordSubmit(e) {
-    e.preventDefault();
-    setPasswordError('');
-    if (password.newPassword !== password.confirmPassword) {
-      setPasswordError('New passwords do not match.');
-      return;
-    }
-    setPasswordSaving(true);
-    apiClient('/api/broker/profile/password', {
-      method: 'PUT',
-      body: JSON.stringify({
-        currentPassword: password.currentPassword,
-        newPassword: password.newPassword,
-      }),
-    })
-      .then(() => {
-        setPassword({ currentPassword: '', newPassword: '', confirmPassword: '' });
-        setPasswordError('');
-        setMessage('Password updated successfully.');
-      })
-      .catch((err) => setPasswordError(err.message || 'Failed to update password'))
-      .finally(() => setPasswordSaving(false));
   }
 
   if (loading) {
@@ -138,55 +111,6 @@ export default function ProfileClient() {
           </form>
         </section>
 
-        <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-slate-800">Change password</h2>
-          <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            {passwordError && (
-              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-                {passwordError}
-              </div>
-            )}
-            <label className="block">
-              <span className="mb-1 block text-sm font-medium text-slate-700">Current password</span>
-              <input
-                type="password"
-                value={password.currentPassword}
-                onChange={(e) => setPassword((p) => ({ ...p, currentPassword: e.target.value }))}
-                required
-                className="block w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
-              />
-            </label>
-            <label className="block">
-              <span className="mb-1 block text-sm font-medium text-slate-700">New password (min 6 characters)</span>
-              <input
-                type="password"
-                value={password.newPassword}
-                onChange={(e) => setPassword((p) => ({ ...p, newPassword: e.target.value }))}
-                required
-                minLength={6}
-                className="block w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
-              />
-            </label>
-            <label className="block">
-              <span className="mb-1 block text-sm font-medium text-slate-700">Confirm new password</span>
-              <input
-                type="password"
-                value={password.confirmPassword}
-                onChange={(e) => setPassword((p) => ({ ...p, confirmPassword: e.target.value }))}
-                required
-                minLength={6}
-                className="block w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
-              />
-            </label>
-            <button
-              type="submit"
-              disabled={passwordSaving}
-              className="rounded-xl bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-800 disabled:opacity-60"
-            >
-              {passwordSaving ? 'Updating...' : 'Update password'}
-            </button>
-          </form>
-        </section>
       </main>
     </>
   );
