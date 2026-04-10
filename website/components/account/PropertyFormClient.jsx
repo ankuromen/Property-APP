@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { apiClient } from '../../lib/apiClient';
+import { useAuth } from '../../context/AuthContext';
 
 const PROPERTY_TYPES = [
   'Apartment', 'Independent House', 'Villa', 'Plot', 'Studio', 'Penthouse', 'PG', 'Farm house',
@@ -65,6 +66,13 @@ export default function PropertyFormClient() {
   const id = params?.id;
   const isEdit = Boolean(id);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { user } = useAuth();
+  const roles = Array.isArray(user?.roles) ? user.roles : [];
+  const isBroker = roles.includes('broker');
+  const [postingAs, setPostingAs] = useState(
+    isEdit ? 'owner' : (searchParams.get('postingAs') || '').toLowerCase()
+  );
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -84,6 +92,12 @@ export default function PropertyFormClient() {
   });
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
+
+  useEffect(() => {
+    if (isEdit) return;
+    const qPostingAs = (searchParams.get('postingAs') || '').toLowerCase();
+    if (qPostingAs) setPostingAs(qPostingAs);
+  }, [isEdit, searchParams]);
 
   useEffect(() => {
     if (!isEdit) return;
@@ -187,6 +201,7 @@ export default function PropertyFormClient() {
     p.highlights = arrFromStr(p.highlights);
     p.communityFeatures = arrFromStr(p.communityFeatures);
     p.images = arrFromStr(p.images);
+    p.postingAs = postingAs === 'broker' ? 'broker' : 'owner';
     return p;
   }
 
@@ -215,12 +230,84 @@ export default function PropertyFormClient() {
     );
   }
 
+  if (!isEdit && !postingAs) {
+    return (
+      <div className="min-h-screen bg-slate-50">
+        <header className="bg-white shadow-sm px-4 py-4 sm:px-6">
+          <div className="flex items-center gap-4">
+            <Link href="/account/properties" className="text-slate-600 hover:text-slate-900 text-sm font-medium">
+              ← My properties
+            </Link>
+            <h1 className="text-lg font-semibold text-slate-800">Choose posting flow</h1>
+          </div>
+        </header>
+        <main className="max-w-4xl mx-auto p-6 space-y-6">
+          {!isBroker && (
+            <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">Post as owner</h2>
+              <p className="mt-2 text-sm text-slate-600">
+                Add property details and submit. Your listing goes to admin for review before it appears publicly.
+              </p>
+              <button
+                type="button"
+                onClick={() => setPostingAs('owner')}
+                className="mt-4 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Continue as owner
+              </button>
+            </section>
+          )}
+
+          <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-slate-900">Post as broker</h2>
+            {isBroker ? (
+              <>
+                <p className="mt-2 text-sm text-slate-600">
+                  You are an approved broker. Continue to create a broker listing.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setPostingAs('broker')}
+                  className="mt-4 rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  Continue as broker
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="mt-2 text-sm text-slate-600">
+                  Broker posting requires an approved broker profile. Complete broker onboarding to unlock this option.
+                </p>
+                <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600">
+                  <li>Public broker profile visibility</li>
+                  <li>Higher trust with verified badge after approval</li>
+                  <li>Better qualified lead discovery</li>
+                </ul>
+                <Link
+                  href="/account/broker-profile"
+                  className="mt-4 inline-flex rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                >
+                  Complete broker profile
+                </Link>
+              </>
+            )}
+          </section>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white shadow-sm px-4 py-4 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/account/properties" className="text-slate-600 hover:text-slate-900 text-sm font-medium">← My properties</Link>
           <h1 className="text-lg font-semibold text-slate-800">{isEdit ? 'Edit property' : 'Add property'}</h1>
+            {!isEdit && (
+              <span className="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">
+                Posting as {postingAs === 'broker' ? 'broker' : 'owner'}
+              </span>
+            )}
         </div>
       </header>
 

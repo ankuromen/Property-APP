@@ -10,6 +10,7 @@ import LocationStatesPage from './pages/locations/LocationStatesPage';
 import LocationCitiesPage from './pages/locations/LocationCitiesPage';
 import LocationLocalitiesPage from './pages/locations/LocationLocalitiesPage';
 import PlansPage from './pages/PlansPage';
+import BrokersPage from './pages/BrokersPage';
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           >
             <Route index element={<Navigate to="/properties" replace />} />
             <Route path="properties" element={<PropertiesPage />} />
+            <Route path="brokers" element={<BrokersPage />} />
             <Route
               path="locations"
               element={

@@ -67,13 +67,30 @@ exports.create = async (req, res) => {
     }
 
     const doc = buildPropertyFromBody(body);
+    const postingAs = String(body.postingAs || '').trim().toLowerCase();
+    const requestedPostedByType = postingAs === 'broker' ? 'broker' : 'owner';
+    const userRoles = Array.isArray(req.vendor?.roles) ? req.vendor.roles : [];
+
+    if (requestedPostedByType === 'broker' && !userRoles.includes('broker')) {
+      return res.status(403).json({
+        message: 'Broker profile approval is required before posting as broker.',
+      });
+    }
+
     doc.title = String(doc.title || title).trim();
     doc.propertyType = String(doc.propertyType || propertyType).trim();
     doc.price = price;
     doc.vendorId = req.vendor._id;
-    doc.postedByType = 'broker';
+    doc.postedByType = requestedPostedByType;
     doc.postedById = req.vendor._id;
     doc.status = 'Pending';
+    if (requestedPostedByType === 'owner') {
+      doc.ownerContact = {
+        name: req.vendor?.name || undefined,
+        phone: req.vendor?.phone || undefined,
+        email: req.vendor?.email || undefined,
+      };
+    }
     if (doc.location === undefined && (body.locality || body.city)) {
       doc.location = [body.locality, body.city].filter(Boolean).join(', ');
     }

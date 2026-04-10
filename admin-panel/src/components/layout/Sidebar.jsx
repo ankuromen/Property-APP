@@ -22,6 +22,10 @@ export default function Sidebar() {
           <span aria-hidden>◇</span>
           Properties
         </NavLink>
+        <NavLink to="/brokers" className={linkClass} end={false}>
+          <span aria-hidden>◇</span>
+          Brokers
+        </NavLink>
         <p className="mb-1 mt-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
           Locations
         </p>

@@ -47,6 +47,8 @@ export function AuthProvider({ children }) {
       name: userData.name,
       email: userData.email,
       phone: userData.phone,
+      roles: userData.roles || user?.roles || ['user'],
+      brokerProfileStatus: userData.brokerProfileStatus || user?.brokerProfileStatus || 'none',
     };
     setUser(data);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));

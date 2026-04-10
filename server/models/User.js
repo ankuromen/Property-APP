@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 /**
- * User account model (formerly Vendor).
+ * User account model.
  * IMPORTANT: This model intentionally uses the existing "vendors" collection
- * so current data and ObjectIds remain valid after renaming.
+ * so current data and ObjectIds remain valid after model rename.
  */
 const userSchema = new mongoose.Schema(
   {
@@ -14,6 +14,26 @@ const userSchema = new mongoose.Schema(
     phone: { type: String, required: true, trim: true },
     // Default onboarding role. Later: upgrade to broker/owner.
     roles: { type: [String], default: ['user'] },
+    brokerProfileStatus: {
+      type: String,
+      enum: ['none', 'draft', 'pending', 'approved', 'rejected'],
+      default: 'none',
+      index: true,
+    },
+    brokerProfile: {
+      fullName: { type: String, trim: true },
+      phone: { type: String, trim: true },
+      email: { type: String, trim: true, lowercase: true },
+      companyName: { type: String, trim: true },
+      experienceYears: { type: Number, min: 0 },
+      operatingCities: [{ type: String, trim: true }],
+      reraNumber: { type: String, trim: true },
+      bio: { type: String, trim: true },
+    },
+    brokerProfileSubmittedAt: { type: Date },
+    brokerProfileReviewedAt: { type: Date },
+    brokerProfileReviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'AdminUser' },
+    brokerProfileReviewNotes: { type: String, trim: true },
 
     consultationFee: { type: Number, default: 100, min: 0 },
     subscriptionStatus: {

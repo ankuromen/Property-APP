@@ -4,6 +4,7 @@ const { requireAdmin } = require('../../middleware/adminAuth');
 const propertyRoutes = require('./properties');
 const locationRoutes = require('./locations');
 const planRoutes = require('./plans');
+const brokerRoutes = require('./brokers');
 
 const router = express.Router();
 
@@ -11,6 +12,7 @@ router.post('/auth/login', authController.login);
 
 router.use(requireAdmin);
 router.use('/properties', propertyRoutes);
+router.use('/brokers', brokerRoutes);
 router.use('/locations', locationRoutes);
 router.use('/plans', planRoutes);
 

@@ -37,7 +37,15 @@ export default function PropertyListClient() {
   return (
     <>
       <header className="border-b border-slate-200 bg-white px-6 py-4">
-        <h1 className="text-xl font-semibold text-slate-800">My properties</h1>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-xl font-semibold text-slate-800">My properties</h1>
+          <Link
+            href="/account/properties/new"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+          >
+            Add property
+          </Link>
+        </div>
       </header>
 
       <main className="max-w-5xl flex-1 p-6">
@@ -46,7 +54,7 @@ export default function PropertyListClient() {
         ) : properties.length === 0 ? (
           <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
             <p className="text-slate-600">
-              You have no properties yet. Use <strong>Add property</strong> in the sidebar to create one.
+              You have no properties yet. Click <strong>Add property</strong> to start your owner or broker flow.
             </p>
           </div>
         ) : (

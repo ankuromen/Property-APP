@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Property = require('../../models/Property');
+const User = require('../../models/User');
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id) && new mongoose.Types.ObjectId(id).toString() === id;
 
@@ -51,6 +52,14 @@ exports.approve = async (req, res) => {
     property.reviewedAt = new Date();
     property.reviewNotes = undefined;
     await property.save();
+
+    // Owner role is granted after first approved owner listing.
+    if (property.postedByType === 'owner' && property.postedById) {
+      await User.updateOne(
+        { _id: property.postedById, roles: { $ne: 'owner' } },
+        { $addToSet: { roles: 'owner' } }
+      );
+    }
 
     res.json({ message: 'Listing approved', property });
   } catch (err) {
