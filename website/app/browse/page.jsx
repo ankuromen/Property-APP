@@ -14,11 +14,12 @@ export async function generateMetadata() {
 }
 
 export default async function BrowsePage({ searchParams }) {
-  const page = Number(searchParams?.page || 1);
-  const city = searchParams?.city || '';
-  const propertyType = searchParams?.propertyType || '';
-  const minPrice = searchParams?.minPrice || '';
-  const maxPrice = searchParams?.maxPrice || '';
+  const params = await searchParams;
+  const page = Number(params?.page || 1);
+  const city = params?.city || '';
+  const propertyType = params?.propertyType || '';
+  const minPrice = params?.minPrice || '';
+  const maxPrice = params?.maxPrice || '';
 
   const qs = new URLSearchParams({ page: String(page), limit: '12', sort: 'createdAt', order: 'desc' });
   if (city) qs.set('city', city);

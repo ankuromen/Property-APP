@@ -12,8 +12,9 @@ export const metadata = {
 };
 
 export default async function BrokersPage({ searchParams }) {
-  const page = Number(searchParams?.page || 1);
-  const city = searchParams?.city || '';
+  const params = await searchParams;
+  const page = Number(params?.page || 1);
+  const city = params?.city || '';
   const qs = new URLSearchParams({ page: String(page), limit: '12' });
   if (city) qs.set('city', city);
 

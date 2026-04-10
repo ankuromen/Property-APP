@@ -208,18 +208,6 @@ function PostPropertyLandingOld() {
                     →
                   </span>
                 </Link>
-                <Link
-                  href="/sign-in?from=/account/properties/new"
-                  className="inline-flex items-center justify-center rounded-2xl border border-white/25 bg-white/10 px-7 py-3.5 text-base font-semibold text-white backdrop-blur-md transition hover:border-white/40 hover:bg-white/15"
-                >
-                  Log in to list
-                </Link>
-                <Link
-                  href="/browse"
-                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3.5 text-base font-medium text-slate-400 underline-offset-4 transition hover:text-white hover:underline"
-                >
-                  Browse listings
-                </Link>
               </div>
 
               <dl className="mt-14 grid gap-6 sm:grid-cols-3">

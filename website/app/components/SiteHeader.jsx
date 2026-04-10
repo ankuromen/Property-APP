@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '../../context/AuthContext';
 
 export default function SiteHeader() {
-  const { ready, isAuthenticated, logout } = useAuth();
+  const { ready, isAuthenticated } = useAuth();
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -14,7 +14,7 @@ export default function SiteHeader() {
         </Link>
         <nav className="flex items-center gap-3 text-sm text-slate-600 sm:gap-4">
           <Link href="/browse" className="hover:text-slate-900">
-            Browse
+            Properties
           </Link>
           <Link href="/brokers" className="hover:text-slate-900">
             Brokers
@@ -23,21 +23,12 @@ export default function SiteHeader() {
             Post property
           </Link>
           {ready && isAuthenticated ? (
-            <>
-              <Link
-                href="/account"
-                className="rounded-lg bg-slate-100 px-3 py-1.5 font-medium text-slate-900 hover:bg-slate-200"
-              >
-                My account
-              </Link>
-              <button
-                type="button"
-                onClick={() => logout()}
-                className="text-slate-500 hover:text-slate-900"
-              >
-                Sign out
-              </button>
-            </>
+            <Link
+              href="/account"
+              className="rounded-lg bg-slate-100 px-3 py-1.5 font-medium text-slate-900 hover:bg-slate-200"
+            >
+              My account
+            </Link>
           ) : (
             <Link
               href="/sign-in"
